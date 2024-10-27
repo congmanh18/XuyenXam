@@ -1,6 +1,5 @@
+### Các bước cấu hình Nginx trên 1 máy VPS
 ### 1. **Tổng Quan**  
-Dự án này hướng đến việc xây dựng **một nền tảng chuyên biệt để đặt lịch và quản lý dịch vụ xăm hình**, giúp người dùng và nghệ nhân tương tác dễ dàng, tối ưu hóa quy trình đặt lịch, đánh giá và thanh toán. Mô hình microservices đảm bảo tính linh hoạt và khả năng mở rộng của ứng dụng.
-
 ---
 
 ### 2. **Phân tích Tính Năng và Lợi Ích**  

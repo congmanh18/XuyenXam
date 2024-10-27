@@ -3,6 +3,7 @@ package req
 import "github.com/congmanh18/XuyenXam/ArtistService/entity"
 
 type ArtistUpdateReq struct {
+	BaseReq
 	Firstname    string         `json:"firstname"`
 	Lastname     string         `json:"lastname"`
 	Username     string         `json:"username"`

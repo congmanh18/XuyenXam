@@ -2,8 +2,11 @@ package handler
 
 import (
 	"github.com/congmanh18/XuyenXam/ArtistService/usecase"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
+
+var validate = validator.New(validator.WithRequiredStructEnabled())
 
 type ArtistHandler interface {
 	HandleCreate(c echo.Context) error
@@ -27,4 +30,14 @@ type ArtistHandlerInject struct {
 	FindAllUseCase  usecase.FindAllUseCase
 	UpdateUseCase   usecase.UpdateUseCase
 	DeleteUseCase   usecase.DeleteUseCase
+}
+
+func NewArtistHandler(inject ArtistHandlerInject) ArtistHandler {
+	return &artistHandlerImpl{
+		createUseCase:   inject.CreateUseCase,
+		findByIDUseCase: inject.FindByIDUseCase,
+		findAllUseCase:  inject.FindAllUseCase,
+		updateUseCase:   inject.UpdateUseCase,
+		deleteUseCase:   inject.DeleteUseCase,
+	}
 }
