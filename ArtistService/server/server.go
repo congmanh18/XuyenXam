@@ -1,6 +1,10 @@
 package server
 
 import (
+	"context"
+	"log"
+	"time"
+
 	"github.com/congmanh18/XuyenXam/ArtistService/handler"
 	"github.com/congmanh18/XuyenXam/ArtistService/migration"
 	"github.com/congmanh18/XuyenXam/ArtistService/model"
@@ -9,43 +13,40 @@ import (
 	"github.com/congmanh18/XuyenXam/ArtistService/usecase"
 	"github.com/congmanh18/lucas-core/config"
 	. "github.com/congmanh18/lucas-core/transport/http"
-	"github.com/congmanh18/lucas-core/transport/http/engine"
-	"github.com/congmanh18/lucas-core/transport/http/route"
 )
 
 const allowMigration = false
 
-func NewServer(serviceConf model.ServiceConfig, routes []route.GroupRoute) *Server {
-	var e = engine.NewEcho()
-	return NewHttpServer(
-		AddName(serviceConf.ServiceName),
-		AddPort(serviceConf.ServicePort),
-		AddEngine(e),
-		AddGroupRoutes(routes),
-	)
-}
-
 func Run(confPath string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	var serviceConf model.ServiceConfig
 	config.MustLoadConfig(confPath, &serviceConf)
 
-	var (
-		appProvider   = provider.NewAppProvider(serviceConf)
-		artistRepo    = repository.NewRepo(appProvider.Postgres)
-		artistHandler = handler.NewArtistHandler(handler.ArtistHandlerInject{
-			CreateUseCase:   usecase.NewCreateUseCase(artistRepo),
-			FindByIDUseCase: usecase.NewFindByIDUseCase(artistRepo),
-			FindAllUseCase:  usecase.NewFindAllUseCase(artistRepo),
-			UpdateUseCase:   usecase.NewCreateUseCase(artistRepo),
-			DeleteUseCase:   usecase.NewDeleteUseCase(artistRepo),
-		})
-		routes = Routes(artistHandler)
-		server = NewServer(serviceConf, routes)
-	)
+	appProvider := provider.NewAppProvider(serviceConf)
+	artistRepo := repository.NewRepo(appProvider.MongoDB)
+	artistHandler := buildArtistHandler(artistRepo)
+	routes := Routes(artistHandler)
+
+	server := NewServer
+	// NewServer(serviceConf, routes)
 
 	if allowMigration {
-		migration.Must(appProvider.Postgres.Executor)
+		if err := migration.Must(ctx, appProvider.MongoDB.Client); err != nil {
+			log.Fatalf("Migration failed: %v", err)
+		}
 	}
 
 	server.Run()
+}
+
+func buildArtistHandler(repo repository.Repo) *handler.ArtistHandler {
+	return handler.NewArtistHandler(handler.ArtistHandlerInject{
+		CreateUseCase:   usecase.NewCreateUseCase(repo),
+		FindByIDUseCase: usecase.NewFindByIDUseCase(repo),
+		FindAllUseCase:  usecase.NewFindAllUseCase(repo),
+		UpdateUseCase:   usecase.NewUpdateUseCase(repo),
+		DeleteUseCase:   usecase.NewDeleteUseCase(repo),
+	})
 }

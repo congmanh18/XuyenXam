@@ -3,8 +3,9 @@ module github.com/congmanh18/XuyenXam
 go 1.23.0
 
 require (
-	github.com/congmanh18/lucas-core v0.0.0-20241026161406-6e40d27a1818
+	github.com/congmanh18/lucas-core v0.0.0-20241028042400-8e6d46cf8de1
 	github.com/go-playground/validator/v10 v10.22.1
+	github.com/google/uuid v1.4.0
 	github.com/labstack/echo/v4 v4.12.0
 	go.mongodb.org/mongo-driver v1.17.1
 	gorm.io/gorm v1.25.12

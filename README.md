@@ -1,4 +1,6 @@
 ### Các bước cấu hình Nginx trên 1 máy VPS
+docker run --name postgres-17 --rm -e POSTGRES_USER=manh -e POSTGRES_PASSWORD=123456 -p 5432:5432 -it -d postgres:17
+
 ### 1. **Tổng Quan**  
 ---
 
@@ -111,3 +113,101 @@
 
 ### 9. **Tổng Kết**
 Dự án ứng dụng này mang đến **trải nghiệm thuận tiện và tin cậy** cho cả nghệ nhân lẫn khách hàng, đáp ứng nhu cầu về quản lý lịch hẹn và dịch vụ xăm hình hiệu quả. Việc áp dụng **microservices và các công nghệ tiên tiến** như Golang, MongoDB, RabbitMQ/Kafka sẽ giúp ứng dụng dễ dàng mở rộng và duy trì hiệu năng cao trong dài hạn.
+
+
+```
+
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+
+Table artist {
+  id string [primary key]
+  name string
+  specialization string
+  orders string []
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table customer {
+  id string [primary key]
+  name string
+  email string
+  phone_number string
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table order {
+  id string [primary key]
+  artist_id string
+  customer_id string
+  items array
+  payment string
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table order_item {
+  id integer [primary key]
+  product_name string
+  quantity int
+  price float
+  created_at timestamp
+}
+
+Table payment {
+  id string [primary key]
+
+  created_at timestamp
+}
+
+Ref: order.customer_id - customer.id // many-to-one
+Ref: order.artist_id - artist.id
+Ref: order_item.id > order.items
+Ref: order.payment - payment.id
+
+
+Table product {
+  id string [primary key]
+  name string
+  description string
+  price float
+  created_at timestamp
+  updated_at timestamp
+}
+
+
+Table category {
+  id string [primary key]
+  name string
+  description string
+}
+
+Table product_category {
+  product_id string [primary key]
+  category_id string [primary key]
+}
+
+Table inventory {
+  product_id string [primary key]
+  quantity int
+  updated_at timestamp
+}
+
+Table image {
+  id string [primary key]
+  product_id string 
+  url string
+  created_at timestamp
+}
+
+
+Ref: product.id - product_category.product_id // many-to-one
+Ref: category.id - product_category.category_id
+Ref: product.id < inventory.product_id
+Ref: product.id < image.product_id
+
+
+```
