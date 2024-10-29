@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func TransformProductCreateReqToEntity(req req.ProductCreateReq) *entity.Product {
+func TransformProductReqToEntity(req req.ProductReq) *entity.Product {
 	return &entity.Product{
 		BaseEntity: record.BaseEntity{
 			ID: pointer.String(uuid.New().String()),
@@ -19,16 +19,38 @@ func TransformProductCreateReqToEntity(req req.ProductCreateReq) *entity.Product
 	}
 }
 
-func TransformProductCategoryCreateReqToEntity(req req.ProductCategoryCreateReq) *entity.ProductCategory {
+func TransformProductCategoryReqToEntity(req req.ProductCategoryReq) *entity.ProductCategory {
 	return &entity.ProductCategory{
 		ProductID:  req.ProductID,
 		CategoryID: req.CategoryID,
 	}
 }
 
-func TransformCategoryCreateReqToEntity(req req.CategoryCreateReq) *entity.Category {
+func TransformCategoryReqToEntity(req req.CategoryReq) *entity.Category {
 	return &entity.Category{
+		BaseEntity: record.BaseEntity{
+			ID: pointer.String(uuid.New().String()),
+		},
 		Name:        req.Name,
 		Description: req.Description,
+	}
+}
+
+func TransformImageReqToEntity(req req.ImageReq) *entity.Image {
+	return &entity.Image{
+		BaseEntity: record.BaseEntity{
+			ID: pointer.String(uuid.New().String()),
+		},
+		ProductID: req.ProductID,
+		URL:       req.ImageURL,
+	}
+}
+
+func TransformInventoryReqToEntity(req req.InventoryReq) *entity.Inventory {
+	return &entity.Inventory{
+		BaseEntity: record.BaseEntity{
+			ID: pointer.String(uuid.New().String()),
+		},
+		Quantity: req.Quantity,
 	}
 }

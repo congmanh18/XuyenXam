@@ -7,5 +7,9 @@ import (
 )
 
 func (p *categoryRepo) DeleteCategory(ctx context.Context, id *string) error {
-	return p.DB.Executor.WithContext(ctx).Delete(&entity.Category{}, id).Error
+	err := p.DB.Executor.WithContext(ctx).Delete(&entity.Category{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

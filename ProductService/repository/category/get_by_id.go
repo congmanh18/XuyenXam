@@ -8,5 +8,9 @@ import (
 
 func (p *categoryRepo) GetCategoryByID(ctx context.Context, id *string) (*entity.Category, error) {
 	var category entity.Category
-	return &category, p.DB.Executor.WithContext(ctx).Where("id = ?", id).First(&category).Error
+	err := p.DB.Executor.WithContext(ctx).Where("id = ?", id).First(&category).Error
+	if err != nil {
+		return nil, err
+	}
+	return &category, nil
 }

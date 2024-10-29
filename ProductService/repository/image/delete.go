@@ -7,6 +7,9 @@ import (
 )
 
 // DeleteImage implements ImageRepository.
-func (i *imageRepo) DeleteImage(ctx context.Context, id string) error {
-	return i.DB.Executor.WithContext(ctx).Delete(&entity.Image{}, id).Error
+func (i *imageRepo) DeleteImage(ctx context.Context, id *string) error {
+	if err := i.DB.Executor.WithContext(ctx).Delete(&entity.Image{}, id).Error; err != nil {
+		return err
+	}
+	return nil
 }

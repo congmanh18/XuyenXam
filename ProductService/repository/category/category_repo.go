@@ -13,6 +13,7 @@ type CategoryRepository interface {
 	CreateCategory(ctx context.Context, category *entity.Category) error
 	UpdateCategory(ctx context.Context, category *entity.Category, id *string) error
 	DeleteCategory(ctx context.Context, id *string) error
+	GetProductsByCategory(ctx context.Context, categoryID *string) ([]entity.Product, error)
 }
 
 type categoryRepo struct {

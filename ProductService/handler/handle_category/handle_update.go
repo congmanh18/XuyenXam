@@ -13,7 +13,7 @@ import (
 func (h *categoryHandleImpl) HandleUpdate(ctx echo.Context) error {
 	id := ctx.Param("id")
 
-	var req req.CategoryUpdateReq
+	var req req.CategoryReq
 
 	if err := ctx.Bind(&req); err != nil {
 		return response.Error(ctx, http.StatusBadRequest, "Invalid request body: "+err.Error())
@@ -23,7 +23,7 @@ func (h *categoryHandleImpl) HandleUpdate(ctx echo.Context) error {
 		return response.Error(ctx, http.StatusBadRequest, "Validate error: "+err.Error())
 	}
 
-	if err := h.updateUseCase.Execute(ctx.Request().Context(), mapper.TransformCategoryUpdateReqToEntity(req), &id); err != nil {
+	if err := h.updateUseCase.Execute(ctx.Request().Context(), mapper.TransformCategoryReqToEntity(req), &id); err != nil {
 		return response.Error(ctx, http.StatusInternalServerError, "Update category failed: "+err.Error())
 	}
 

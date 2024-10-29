@@ -7,5 +7,9 @@ import (
 )
 
 func (p *categoryRepo) CreateCategory(ctx context.Context, category *entity.Category) error {
-	return p.DB.Executor.WithContext(ctx).Create(category).Error
+	err := p.DB.Executor.WithContext(ctx).Create(category).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -8,5 +8,9 @@ import (
 
 // AddImage implements ImageRepository.
 func (i *imageRepo) AddImage(ctx context.Context, image *entity.Image) error {
-	return i.DB.Executor.WithContext(ctx).Create(image).Error
+	err := i.DB.Executor.WithContext(ctx).Create(image).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

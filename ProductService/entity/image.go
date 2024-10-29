@@ -6,6 +6,6 @@ import (
 
 type Image struct {
 	record.BaseEntity
-	ProductID int    `gorm:"not null"`
-	URL       string `gorm:"not null"`
+	ProductID *string `gorm:"not null"`
+	URL       *string `gorm:"not null"`
 }

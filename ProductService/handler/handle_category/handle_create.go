@@ -11,7 +11,7 @@ import (
 
 // HandleCreate implements CategoryHandler.
 func (c *categoryHandleImpl) HandleCreate(ctx echo.Context) error {
-	var category req.CategoryCreateReq
+	var category req.CategoryReq
 
 	if err := ctx.Bind(&category); err != nil {
 		return response.Error(ctx, http.StatusBadRequest, "Invalid request body: "+err.Error())
@@ -21,7 +21,7 @@ func (c *categoryHandleImpl) HandleCreate(ctx echo.Context) error {
 		return response.Error(ctx, http.StatusBadRequest, "Validate error: "+err.Error())
 	}
 
-	if err := c.createUseCase.Execute(ctx.Request().Context(), mapper.TransformCategoryCreateReqToEntity(category)); err != nil {
+	if err := c.createUseCase.Execute(ctx.Request().Context(), mapper.TransformCategoryReqToEntity(category)); err != nil {
 		return response.Error(ctx, http.StatusInternalServerError, "Create category failed: "+err.Error())
 	}
 

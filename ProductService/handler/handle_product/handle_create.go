@@ -10,7 +10,7 @@ import (
 )
 
 func (p *productHandleImpl) HandleCreate(c echo.Context) error {
-	var product req.ProductCreateReq
+	var product req.ProductReq
 	if err := c.Bind(&product); err != nil {
 		return response.Error(c, http.StatusBadRequest, "Invalid request body: "+err.Error())
 	}
@@ -19,7 +19,7 @@ func (p *productHandleImpl) HandleCreate(c echo.Context) error {
 		return response.Error(c, http.StatusBadRequest, "Validate error: "+err.Error())
 	}
 
-	if err := p.createUseCase.Execute(c.Request().Context(), mapper.TransformProductCreateReqToEntity(product)); err != nil {
+	if err := p.createUseCase.Execute(c.Request().Context(), mapper.TransformProductReqToEntity(product)); err != nil {
 		return response.Error(c, http.StatusInternalServerError, err.Error())
 	}
 

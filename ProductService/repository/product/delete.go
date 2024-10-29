@@ -7,5 +7,9 @@ import (
 )
 
 func (p *productRepo) DeleteProduct(ctx context.Context, id *string) error {
-	return p.DB.Executor.WithContext(ctx).Delete(&entity.Product{}, id).Error
+	err := p.DB.Executor.WithContext(ctx).Delete(&entity.Product{}, id).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }

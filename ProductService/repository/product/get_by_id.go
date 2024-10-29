@@ -8,5 +8,9 @@ import (
 
 func (p *productRepo) GetProductByID(ctx context.Context, id *string) (*entity.Product, error) {
 	var product entity.Product
-	return &product, p.DB.Executor.WithContext(ctx).Where("id = ?", id).First(&product).Error
+	err := p.DB.Executor.WithContext(ctx).Where("id = ?", id).First(&product).Error
+	if err != nil {
+		return nil, err
+	}
+	return &product, nil
 }

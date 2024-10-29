@@ -13,12 +13,12 @@ import (
 func (p *productHandleImpl) HandleUpdate(c echo.Context) error {
 	id := c.Param("id")
 
-	var product req.ProductUpdateReq
+	var product req.ProductReq
 	if err := c.Bind(&product); err != nil {
 		return response.Error(c, http.StatusBadRequest, "Invalid request body: "+err.Error())
 	}
 
-	if err := p.updateUseCase.Execute(c.Request().Context(), mapper.TransformProductUpdateReqToEntity(product), &id); err != nil {
+	if err := p.updateUseCase.Execute(c.Request().Context(), mapper.TransformProductReqToEntity(product), &id); err != nil {
 		return response.Error(c, http.StatusInternalServerError, err.Error())
 	}
 

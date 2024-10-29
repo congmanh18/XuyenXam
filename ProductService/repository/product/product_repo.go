@@ -5,6 +5,7 @@ import (
 
 	"github.com/congmanh18/XuyenXam/ProductService/entity"
 	"github.com/congmanh18/lucas-core/db/postgresql"
+	"github.com/congmanh18/lucas-core/record"
 )
 
 type ProductRepository interface {
@@ -13,6 +14,8 @@ type ProductRepository interface {
 	CreateProduct(ctx context.Context, product *entity.Product) error
 	UpdateProduct(ctx context.Context, product *entity.Product, id *string) error
 	DeleteProduct(ctx context.Context, id *string) error
+	SearchProduct(ctx context.Context, query *string) ([]entity.Product, error)
+	GetProducts(ctx context.Context, pagination *record.Pagination) ([]entity.Product, error)
 }
 
 type productRepo struct {

@@ -8,5 +8,9 @@ import (
 
 func (p *categoryRepo) GetAllCategories(ctx context.Context) ([]entity.Category, error) {
 	var categories []entity.Category
-	return categories, p.DB.Executor.WithContext(ctx).Find(&categories).Error
+	err := p.DB.Executor.WithContext(ctx).Find(&categories).Error
+	if err != nil {
+		return nil, err
+	}
+	return categories, nil
 }
